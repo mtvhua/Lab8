@@ -159,6 +159,21 @@ class FirestoreRepository @javax.inject.Inject constructor() : IFirestoreReposit
     }
 
     /**
+     * Actualiza el estado de favorito de una receta específica en Firestore.
+     */
+    override suspend fun toggleFavorite(recipeId: String, isFavorite: Boolean): Result<Unit> {
+        return try {
+            firestore.collection("recipes")
+                .document(recipeId)
+                .update("isFavorite", isFavorite) // Actualización parcial del documento
+                .await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    /**
      * Elimina una receta por su ID
      *
      * @param recipeId ID del documento a eliminar

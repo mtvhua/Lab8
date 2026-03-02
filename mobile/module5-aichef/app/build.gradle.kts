@@ -39,8 +39,6 @@ plugins {
 
     // Kotlin Serialization para JSON parsing
     alias(libs.plugins.kotlin.serialization)
-    id("com.android.application")
-    id("com.google.gms.google-services")
 
 }
 

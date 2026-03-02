@@ -98,6 +98,9 @@ class ChefViewModel @Inject constructor(
     // LISTA DE RECETAS
     // =========================================================================
 
+    private val _showFavoritesOnly = MutableStateFlow(false) // filtro para las recetas
+    val showFavoritesOnly = _showFavoritesOnly.asStateFlow()
+
     /**
      * Lista de recetas del usuario autenticado
      *
@@ -107,20 +110,21 @@ class ChefViewModel @Inject constructor(
      *
      * Si el usuario no está autenticado, emitimos lista vacía.
      */
-    val recipes: StateFlow<List<Recipe>> = authState
-        .flatMapLatest { state ->
+    val recipes: StateFlow<List<Recipe>> = kotlinx.coroutines.flow.combine( // se usa el combine para destacar los favs
+        authState.flatMapLatest { state ->
             when (state) {
-                is AuthState.Authenticated -> {
-                    firestoreRepository.observeUserRecipes(state.userId)
-                }
+                is AuthState.Authenticated -> firestoreRepository.observeUserRecipes(state.userId)
                 else -> flowOf(emptyList())
             }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
+        },
+        _showFavoritesOnly
+    ) { list, onlyFavorites ->
+        if (onlyFavorites) list.filter { it.isFavorite } else list
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
 
     // =========================================================================
     // ESTADO DE GENERACIÓN DE RECETAS
@@ -275,6 +279,19 @@ class ChefViewModel @Inject constructor(
     // =========================================================================
     // ACCIONES DE RECETAS
     // =========================================================================
+
+    // activa el estado de favs
+    fun toggleFavorite(recipe: Recipe) {
+        viewModelScope.launch {
+            // Llamamos al repositorio para actualizar Firestore
+            firestoreRepository.toggleFavorite(recipe.id, !recipe.isFavorite)
+        }
+    }
+
+    // Cambia el filtro de la lista
+    fun setFavoritesFilter(showOnlyFavorites: Boolean) {
+        _showFavoritesOnly.value = showOnlyFavorites
+    }
 
     /**
      * Elimina una receta
