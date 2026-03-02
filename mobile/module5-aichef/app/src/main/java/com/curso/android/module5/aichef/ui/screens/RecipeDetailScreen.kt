@@ -44,6 +44,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.curso.android.module5.aichef.domain.model.UiState
 import com.curso.android.module5.aichef.ui.viewmodel.ChefViewModel
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.material.icons.filled.Share
+import com.curso.android.module5.aichef.util.ShareUtils
 
 /**
  * =============================================================================
@@ -130,6 +133,7 @@ fun RecipeDetailScreen(
 
     // Estado de la generación de imagen
     val imageState by viewModel.imageGenerationState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     // =========================================================================
     // SIDE EFFECT: Verificar Cache o Generar Imagen
@@ -162,8 +166,6 @@ fun RecipeDetailScreen(
                 title = { Text(recipe?.title ?: "Detalle de Receta") },
                 navigationIcon = {
                     IconButton(onClick = {
-                        // Limpiamos el estado de imagen al salir para evitar
-                        // mostrar la imagen anterior en la próxima receta
                         viewModel.clearImageState()
                         onNavigateBack()
                     }) {
@@ -171,6 +173,20 @@ fun RecipeDetailScreen(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Volver"
                         )
+                    }
+                },
+                // AQUÍ AGREGAMOS EL BOTÓN DE COMPARTIR
+                actions = {
+                    IconButton(onClick = {
+                        // Lógica simplificada: Si hay una URL de éxito, intentamos compartir
+                        if (imageState is UiState.Success) {
+                            val imageUrl = (imageState as UiState.Success<String>).data
+                            // Aquí llamarías a una función que descargue el bitmap y luego ShareUtils
+                            // O simplemente compartes el texto por ahora para validar el botón
+                            android.widget.Toast.makeText(context, "Preparando para compartir...", android.widget.Toast.LENGTH_SHORT).show()
+                        }
+                    }) {
+                        Icon(Icons.Default.Share, contentDescription = "Compartir")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
