@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
+
     // ==========================================================================
     // GOOGLE SERVICES PLUGIN
     // ==========================================================================
@@ -38,6 +39,9 @@ plugins {
 
     // Kotlin Serialization para JSON parsing
     alias(libs.plugins.kotlin.serialization)
+    id("com.android.application")
+    id("com.google.gms.google-services")
+
 }
 
 android {
@@ -121,6 +125,8 @@ dependencies {
     // BoM (Bill of Materials) - SIEMPRE usar platform() para el BoM
     // Esto asegura que todas las librerías de Firebase sean compatibles
     implementation(platform(libs.firebase.bom))
+    implementation(platform("com.google.firebase:firebase-bom:34.9.0"))
+    implementation("com.google.firebase:firebase-analytics")
 
     // Firebase Auth - Para login/registro de usuarios
     implementation(libs.firebase.auth)

@@ -9,6 +9,7 @@
 plugins {
     // Plugin de Android Application - NO aplicar aquí
     alias(libs.plugins.android.application) apply false
+    id("com.google.gms.google-services") version "4.4.4" apply false
 
     // Plugin de Kotlin para Android
     alias(libs.plugins.kotlin.android) apply false
