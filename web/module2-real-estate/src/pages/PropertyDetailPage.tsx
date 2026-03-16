@@ -7,7 +7,7 @@
 // Hook de React Router que extrae parámetros de la URL.
 // La ruta /property/:id define un parámetro dinámico 'id'.
 // =============================================================================
-
+import { ImageGallery } from '@/components/ImageGallery'; // para agregar la image gallery
 import type React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Bed, Bath, Square, Calendar, Tag } from 'lucide-react';
@@ -57,11 +57,6 @@ export function PropertyDetailPage(): React.ReactElement {
     }
   };
 
-  // Imagen principal o placeholder
-  const mainImage =
-    property.images[0] ??
-    `https://placehold.co/1200x600/e2e8f0/64748b?text=${encodeURIComponent(property.propertyType)}`;
-
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Header con navegación */}
@@ -75,39 +70,14 @@ export function PropertyDetailPage(): React.ReactElement {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Columna principal */}
+        {/* Columna principal //////////////////// y el image gallery */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Imagen principal */}
-          <div className="relative rounded-lg overflow-hidden">
-            <img
-              src={mainImage}
-              alt={property.title}
-              className="w-full h-[400px] object-cover"
+            <ImageGallery
+              images={property.images}
+              title={property.title}
+              operationType={property.operationType}
+              propertyType={property.propertyType}
             />
-            <span
-              className={`absolute top-4 left-4 px-4 py-2 text-sm font-semibold rounded-full ${
-                property.operationType === 'venta'
-                  ? 'bg-green-500 text-white'
-                  : 'bg-blue-500 text-white'
-              }`}
-            >
-              {OPERATION_TYPE_LABELS[property.operationType]}
-            </span>
-          </div>
-
-          {/* Galería de imágenes adicionales */}
-          {property.images.length > 1 && (
-            <div className="grid grid-cols-4 gap-2">
-              {property.images.slice(1).map((img, index) => (
-                <img
-                  key={index}
-                  src={img}
-                  alt={`${property.title} - Imagen ${index + 2}`}
-                  className="w-full h-24 object-cover rounded-lg"
-                />
-              ))}
-            </div>
-          )}
 
           {/* Descripción */}
           <Card>

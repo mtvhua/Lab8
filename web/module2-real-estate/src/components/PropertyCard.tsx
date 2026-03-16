@@ -18,8 +18,6 @@ import { Button } from '@/components/ui/button';
 import type { Property } from '@/types/property';
 import { PROPERTY_TYPE_LABELS, OPERATION_TYPE_LABELS } from '@/types/property';
 import { formatPrice, formatArea, truncateText } from '@/lib/utils';
-
-// NUEVO: Importamos el botón que acabamos de crear
 import { CompareButton } from './CompareButton';
 
 /**
@@ -29,7 +27,7 @@ interface PropertyCardProps {
   property: Property;
   onDelete?: (id: string) => void;
 
-  // NUEVO: Agregamos las props opcionales para manejar la comparación
+  // aca manejamos las comparaciones
   isCompared?: boolean;
   onCompareToggle?: (id: string) => void;
   compareDisabled?: boolean;
@@ -38,7 +36,6 @@ interface PropertyCardProps {
 export function PropertyCard({
   property,
   onDelete,
-  // NUEVO: Extraemos las nuevas props
   isCompared = false,
   onCompareToggle,
   compareDisabled = false
@@ -116,7 +113,6 @@ export function PropertyCard({
         </div>
       </CardContent>
 
-      {/* NUEVO: Cambié el layout del footer a flex-col para que los botones se apilen bien */}
       <CardFooter className="p-4 pt-0 flex flex-col gap-2">
         <div className="flex w-full gap-2">
           {/* Botón ver detalles */}
@@ -137,8 +133,7 @@ export function PropertyCard({
           )}
         </div>
 
-        {/* NUEVO: Renderizamos el botón de comparar solo si nos pasaron la función onCompareToggle */}
-        {onCompareToggle && (
+        {onCompareToggle && ( // para comparar
           <CompareButton
             propertyId={property.id}
             isSelected={isCompared}

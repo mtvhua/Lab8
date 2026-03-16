@@ -1,7 +1,3 @@
-// =============================================================================
-// PÁGINA: COMPARAR PROPIEDADES - Real Estate React (Challenge Lab Parte 1)
-// =============================================================================
-
 import type React from 'react';
 import { useState, useEffect } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
@@ -50,7 +46,6 @@ export function ComparePage(): React.ReactElement {
     ? Math.max(...compareList.map(p => p.area))
     : 0;
 
-  // ESTADO VACÍO: Si no hay propiedades seleccionadas
   if (compareList.length === 0) {
     return (
       <div className="container mx-auto px-4 py-12 text-center">
@@ -82,7 +77,7 @@ export function ComparePage(): React.ReactElement {
         </p>
       </div>
 
-      {/* Tabla de Comparación (Usando CSS Grid para que sea responsive) */}
+      {/* Tabla de Comparación usando CSS Grid */}
       <div className="overflow-x-auto">
         <table className="w-full min-w-[800px] border-collapse bg-card rounded-lg overflow-hidden shadow-sm border">
           <thead>
@@ -167,7 +162,7 @@ export function ComparePage(): React.ReactElement {
               {Array.from({ length: 3 - compareList.length }).map((_, i) => <td key={`empty-baths-${i}`}></td>)}
             </tr>
 
-            {/* FILA: Precio por m2 (Calculado en tiempo real) */}
+            {/* precio por m2, lo calcula automaticamente */}
             <tr className="hover:bg-muted/30 transition-colors">
               <td className="p-4 font-medium text-muted-foreground">Precio / m²</td>
               {compareList.map(property => {

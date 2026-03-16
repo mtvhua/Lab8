@@ -35,19 +35,15 @@ import {
 } from '@/types/property';
 
 export function HomePage(): React.ReactElement {
-  // =========================================================================
-  // ESTADO
-  // =========================================================================
   const [properties, setProperties] = useState<Property[]>([]);
   const [filters, setFilters] = useState<PropertyFilters>({});
 
-  // NUEVO: Estado para mantener los IDs de las propiedades seleccionadas para comparar
+  // para que se mantengan las proopiedades seleccionadas
   const [comparedPropertyIds, setComparedPropertyIds] = useState<string[]>([]);
 
-  // NUEVO: Hook para la navegación programática
+  // >>>>>>>>>>>>>>>>>>>
   const navigate = useNavigate();
 
-  // ... (El código de loadProperties y useEffect se mantiene igual)
   const loadProperties = useCallback(() => {
     const filtered = filterProperties(filters);
     setProperties(filtered);
@@ -80,14 +76,14 @@ export function HomePage(): React.ReactElement {
     if (window.confirm('¿Estás seguro de eliminar esta propiedad?')) {
       deleteProperty(id);
 
-      // NUEVO: Si eliminamos una propiedad, también la quitamos de la lista de comparación
+      // si se elimina una prop. se quita tmn en comparacion
       setComparedPropertyIds(prev => prev.filter(compareId => compareId !== id));
 
       loadProperties();
     }
   };
 
-  // NUEVO: Handler para alternar la selección de una propiedad para comparar
+  // aalternar la selección de una propiedad para comparar
   const handleToggleCompare = (id: string): void => {
     setComparedPropertyIds(prev => {
       // Si ya está seleccionada, la quitamos
@@ -98,7 +94,7 @@ export function HomePage(): React.ReactElement {
       if (prev.length < 3) {
         return [...prev, id];
       }
-      // Si ya hay 3, no hacemos nada (el botón debería estar deshabilitado de todas formas)
+      // Si ya hay 3, no hacemos nada
       return prev;
     });
   };
@@ -109,7 +105,7 @@ export function HomePage(): React.ReactElement {
   );
 
   return (
-    <div className="container mx-auto px-4 py-8 relative"> {/* NUEVO: relative para el botón flotante */}
+    <div className="container mx-auto px-4 py-8 relative">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
         <div>
@@ -119,7 +115,7 @@ export function HomePage(): React.ReactElement {
           </p>
         </div>
 
-        <div className="flex gap-2"> {/* NUEVO: Contenedor para alinear los botones */}
+        <div className="flex gap-2">
           <Button asChild>
             <Link to="/new">
               <Plus className="h-4 w-4 mr-2" />
@@ -129,7 +125,6 @@ export function HomePage(): React.ReactElement {
         </div>
       </div>
 
-      {/* ... (Todo el bloque de Filtros se mantiene exactamente igual) ... */}
       <div className="bg-card rounded-lg border p-4 mb-8">
         {/* ... */}
       </div>
@@ -151,11 +146,10 @@ export function HomePage(): React.ReactElement {
         </div>
       ) : (
         <div className="text-center py-12">
-           {/* ... (Estado vacío se mantiene igual) ... */}
         </div>
       )}
 
-      {/* NUEVO: Botón Flotante para ir a la página de comparación (solo aparece si hay seleccionadas) */}
+      {/* boton para indicar las seleccionadas */}
       {comparedPropertyIds.length > 0 && (
         <div className="fixed bottom-8 right-8 z-50">
           <Button
