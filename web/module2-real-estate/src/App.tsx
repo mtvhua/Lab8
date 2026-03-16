@@ -18,6 +18,7 @@ import { Home, Building2 } from 'lucide-react';
 import { HomePage } from '@/pages/HomePage';
 import { NewPropertyPage } from '@/pages/NewPropertyPage';
 import { PropertyDetailPage } from '@/pages/PropertyDetailPage';
+import { ComparePage } from './pages/ComparePage';
 
 /**
  * Componente principal de la aplicación.
@@ -74,6 +75,8 @@ function App(): React.ReactElement {
 
             {/* Página de detalle de propiedad */}
             <Route path="/property/:id" element={<PropertyDetailPage />} />
+
+            <Route path="/compare" element={<ComparePage />} /> {/* ///////////////   para comparar las propierdades*/}
 
             {/* Ruta 404 - Página no encontrada */}
             <Route
